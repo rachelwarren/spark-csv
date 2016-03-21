@@ -118,44 +118,46 @@ class TypeCastSuite extends FunSuite {
     assert(TypeCast.castTo("", StringType, true, true, "") == null)
   }
 
-  test("Parse exception is caught correctly"){
+  test("Parse exception is caught correctly in Permissive mode"){
 
     def testParseException( castType : DataType, badValues : Seq[String]): Unit = {
       badValues.foreach(testValue => {
-        assert(TypeCast.castTo(testValue, castType, true, false, "", null, true) == null)
+        assert(TypeCast.castTo(
+          testValue, castType, true, false, "", null, permissive = true) == null)
         // if not nullable it isn't null
-        assert(Try(TypeCast.castTo(testValue, castType, false, false, "", null, true)).isFailure)
+        assert(Try(TypeCast.castTo(
+          testValue, castType, false, false, "", null, permissive = true)).isFailure)
       }
       )
     }
 
-    assert(TypeCast.castTo("10", ByteType, true, false, "", null, true) == 10)
+    assert(TypeCast.castTo("10", ByteType, true, false, "", null, permissive = true) == 10)
     testParseException(ByteType, Seq("10.5", "s", "true"))
 
-    assert(TypeCast.castTo("10", ShortType, true, false, "", null, true) == 10)
+    assert(TypeCast.castTo("10", ShortType, true, false, "", null, permissive = true) == 10)
     testParseException(ShortType, Seq("s", "true"))
 
-    assert(TypeCast.castTo("10", IntegerType, true, false, "", null, true) == 10)
+    assert(TypeCast.castTo("10", IntegerType, true, false, "", null, permissive = true) == 10)
     testParseException(IntegerType, Seq("10.5", "s", "true"))
 
-    assert(TypeCast.castTo("10", LongType, true, false, "", null, true) == 10)
+    assert(TypeCast.castTo("10", LongType, true, false, "", null, permissive = true) == 10)
     testParseException(LongType, Seq("10.5", "s", "true"))
 
-    assert(TypeCast.castTo("1.00", FloatType, true, false, "", null, true) == 1.0)
+    assert(TypeCast.castTo("1.00", FloatType, true, false, "", null, permissive = true) == 1.0)
     testParseException(FloatType, Seq("s", "true"))
 
-    assert(TypeCast.castTo("1.00", DoubleType, true, false, "", null, true) == 1.0)
+    assert(TypeCast.castTo("1.00", DoubleType, true, false, "", null, permissive = true) == 1.0)
     testParseException(DoubleType, Seq("s", "true"))
 
-    assert(TypeCast.castTo("true", BooleanType, true, false, "", null, true) == true)
+    assert(TypeCast.castTo("true", BooleanType, true, false, "", null, permissive = true) == true)
     testParseException(BooleanType, Seq("s", "5"))
 
     val timestamp = "2015-01-01 00:00:00"
-    assert(TypeCast.castTo(timestamp, TimestampType, true, false, "", null, true)
+    assert(TypeCast.castTo(timestamp, TimestampType, true, false, "", null, permissive = true)
       == Timestamp.valueOf(timestamp))
     testParseException(TimestampType, Seq("5", "string"))
 
-    assert(TypeCast.castTo("2015-01-01", DateType, true, false, "", null, true)
+    assert(TypeCast.castTo("2015-01-01", DateType, true, false, "", null, permissive = true)
       == Date.valueOf("2015-01-01"))
     testParseException(DateType, Seq("5", "string", timestamp))
   }

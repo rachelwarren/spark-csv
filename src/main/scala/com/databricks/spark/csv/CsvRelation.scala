@@ -49,8 +49,7 @@ case class CsvRelation protected[spark] (
     inferCsvSchema: Boolean,
     codec: String = null,
     nullValue: String = "",
-    dateFormat: String = null,
-    treatParseExceptionAsNull: Boolean)
+    dateFormat: String = null)
   (@transient val sqlContext: SQLContext)
   extends BaseRelation with TableScan with PrunedScan with InsertableRelation {
 
@@ -120,15 +119,14 @@ case class CsvRelation protected[spark] (
           while (index < schemaFields.length) {
             val field = schemaFields(index)
             rowArray(index) = TypeCast.castTo(tokens(index), field.dataType, field.nullable,
-              treatEmptyValuesAsNulls, nullValue, simpleDateFormatter,
-              treatParseExceptionAsNull)
+              treatEmptyValuesAsNulls, nullValue, simpleDateFormatter, permissive)
             index = index + 1
           }
           Some(Row.fromSeq(rowArray))
         } catch {
           case aiob: ArrayIndexOutOfBoundsException if permissive =>
             (index until schemaFields.length).foreach(ind => rowArray(ind) = null)
-            Some(Row.fromSeq(rowArray))
+               Some(Row.fromSeq(rowArray))
           case _: java.lang.NumberFormatException |
                _: IllegalArgumentException if dropMalformed =>
             logger.warn("Number format exception. " +
@@ -201,7 +199,7 @@ case class CsvRelation protected[spark] (
                 treatEmptyValuesAsNulls,
                 nullValue,
                 simpleDateFormatter,
-                treatParseExceptionAsNull
+                permissive
               )
               subIndex = subIndex + 1
             }

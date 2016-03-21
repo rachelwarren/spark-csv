@@ -56,8 +56,7 @@ package object csv {
         ignoreLeadingWhiteSpace = ignoreLeadingWhiteSpace,
         ignoreTrailingWhiteSpace = ignoreTrailingWhiteSpace,
         treatEmptyValuesAsNulls = false,
-        inferCsvSchema = inferSchema,
-        treatParseExceptionAsNull = false)(sqlContext)
+        inferCsvSchema = inferSchema)(sqlContext)
       sqlContext.baseRelationToDataFrame(csvRelation)
     }
 
@@ -82,8 +81,7 @@ package object csv {
         ignoreLeadingWhiteSpace = ignoreLeadingWhiteSpace,
         ignoreTrailingWhiteSpace = ignoreTrailingWhiteSpace,
         treatEmptyValuesAsNulls = false,
-        inferCsvSchema = inferSchema,
-        treatParseExceptionAsNull = false)(sqlContext)
+        inferCsvSchema = inferSchema)(sqlContext)
       sqlContext.baseRelationToDataFrame(csvRelation)
     }
   }

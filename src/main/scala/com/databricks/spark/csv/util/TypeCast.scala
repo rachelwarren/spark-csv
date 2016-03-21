@@ -47,7 +47,7 @@ object TypeCast {
       treatEmptyValuesAsNulls: Boolean = false,
       nullValue: String = "",
       dateFormatter: SimpleDateFormat = null,
-      parseExceptionAsNull : Boolean = false): Any = {
+      permissive : Boolean = false): Any = {
     // if nullValue is not an empty string, don't require treatEmptyValuesAsNulls
     // to be set to true
     val nullValueIsNotEmpty = nullValue != ""
@@ -84,7 +84,8 @@ object TypeCast {
       catch {
         case e : UnsupportedTypeException =>
           throw e
-       case e => if (parseExceptionAsNull && nullable) null else throw e
+          // if permissive, catch exception and nullable, and return null
+       case e : Exception => if (permissive && nullable) null else throw e
       }
     }
   }

@@ -230,9 +230,10 @@ abstract class AbstractCsvSuite extends FunSuite with BeforeAndAfterAll {
 
     val results = new CsvParser()
       .withSchema(carsSchema)
+      .withParseMode(ParseModes.PERMISSIVE_MODE)
       .withUseHeader(true)
       .withDelimiter(',')
-      .withQuoteChar('\"').withTreatParseExceptionAsNull(true)
+      .withQuoteChar('\"')
       .csvFile(sqlContext, carsDirtyTsvFile).select("year", "make")
       .collect()
 

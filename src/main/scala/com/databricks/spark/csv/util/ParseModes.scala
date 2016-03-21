@@ -20,7 +20,10 @@ private[csv] object ParseModes {
   val PERMISSIVE_MODE = "PERMISSIVE"
   val DROP_MALFORMED_MODE = "DROPMALFORMED"
   val FAIL_FAST_MODE = "FAILFAST"
-
+/**
+  *  Now in permissive mode, all parse exceptions will be caught.
+  *  If the column is nullable and parsed as null.
+*/
   val DEFAULT = PERMISSIVE_MODE
 
   def isValidMode(mode: String): Boolean = {

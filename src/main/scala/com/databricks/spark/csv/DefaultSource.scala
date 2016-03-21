@@ -169,8 +169,7 @@ class DefaultSource
       inferSchemaFlag,
       codec,
       nullValue,
-      dateFormat,
-      treatParseExceptionAsNullFlag)(sqlContext)
+      dateFormat)(sqlContext)
   }
 
   override def createRelation(

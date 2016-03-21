@@ -42,7 +42,6 @@ class CsvParser extends Serializable {
   private var codec: String = null
   private var nullValue: String = ""
   private var dateFormat: String = null
-  private var treatParseExceptionAsNull : Boolean = false
 
   def withUseHeader(flag: Boolean): CsvParser = {
     this.useHeader = flag
@@ -124,16 +123,6 @@ class CsvParser extends Serializable {
     this
   }
 
-  /**
-    * If this is set to true then dirty data, for example a string in a numeric column,
-    * or a mal-formed date will not cause a failure.
-    * Instead, that value will be null in the resulting data
-    */
-  def withTreatParseExceptionAsNull(flag : Boolean) : CsvParser = {
-    this.treatParseExceptionAsNull = flag
-    this
-  }
-
   /** Returns a Schema RDD for the given CSV path. */
   @throws[RuntimeException]
   def csvFile(sqlContext: SQLContext, path: String): DataFrame = {
@@ -154,8 +143,7 @@ class CsvParser extends Serializable {
       inferSchema,
       codec,
       nullValue,
-      dateFormat,
-      treatParseExceptionAsNull)(sqlContext)
+      dateFormat)(sqlContext)
     sqlContext.baseRelationToDataFrame(relation)
   }
 
@@ -177,8 +165,7 @@ class CsvParser extends Serializable {
       inferSchema,
       codec,
       nullValue,
-      dateFormat,
-      treatParseExceptionAsNull)(sqlContext)
+      dateFormat)(sqlContext)
     sqlContext.baseRelationToDataFrame(relation)
   }
 }
