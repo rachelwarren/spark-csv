@@ -152,6 +152,14 @@ class DefaultSource
 
     val codec = parameters.getOrElse("codec", null)
 
+    val maxCharsPerColStr = parameters.getOrElse("maxCharsPerCol", "100000")
+    val maxCharsPerCol = try {
+      maxCharsPerColStr.toInt
+    } catch {
+      case e: Exception => throw new Exception("maxCharsPerCol must be a valid integer")
+    }
+
+
     CsvRelation(
       () => TextFile.withCharset(sqlContext.sparkContext, path, charset),
       Some(path),
@@ -170,7 +178,8 @@ class DefaultSource
       codec,
       nullValue,
       dateFormat,
-      treatParseExceptionAsNullFlag)(sqlContext)
+      treatParseExceptionAsNullFlag,
+      maxCharsPerCol)(sqlContext)
   }
 
   override def createRelation(
