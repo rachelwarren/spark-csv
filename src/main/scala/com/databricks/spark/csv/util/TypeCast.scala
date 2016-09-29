@@ -19,9 +19,7 @@ import java.math.BigDecimal
 import java.sql.{Date, Timestamp}
 import java.text.{SimpleDateFormat, NumberFormat}
 import java.util.Locale
-
 import org.apache.spark.sql.types._
-import org.json4s.ParserUtil.ParseException
 
 import scala.util.Try
 

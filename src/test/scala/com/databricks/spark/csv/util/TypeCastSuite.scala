@@ -118,15 +118,18 @@ class TypeCastSuite extends FunSuite {
     assert(TypeCast.castTo("", StringType, true, true, "") == null)
   }
 
-  test("Parse exception is caught correctly"){
+  test("Parse exception is caught correctly") {
 
     def testParseException( castType : DataType, badValues : Seq[String]): Unit = {
       badValues.foreach(testValue => {
         assert(TypeCast.castTo(testValue, castType, true, false, "", null, true) == null)
         // if not nullable it isn't null
-        assert(Try(TypeCast.castTo(testValue, castType, false, false, "", null, true)).isFailure)
-      }
-      )
+        try{
+          TypeCast.castTo(testValue, castType, false, false, "", null, true)
+        } catch {
+          case ( e : Throwable) => e.isInstanceOf[NumberFormatException]
+        }
+      })
     }
 
     assert(TypeCast.castTo("10", ByteType, true, false, "", null, true) == 10)
@@ -159,6 +162,5 @@ class TypeCastSuite extends FunSuite {
       == Date.valueOf("2015-01-01"))
     testParseException(DateType, Seq("5", "string", timestamp))
   }
-
 
 }
